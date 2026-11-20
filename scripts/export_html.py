@@ -1,4 +1,4 @@
-"""Export the project page as a single HTML file, including images and fonts."""
+"""Export a single HTML with embedded images/fonts and the hosted rollout video."""
 
 import argparse
 import base64
@@ -13,6 +13,7 @@ from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SITE_URL = "https://teamfasterwam.github.io/Faster-WAM/"
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
@@ -55,12 +56,18 @@ def embed_fonts(css, characters):
 
 
 class ResourceAudit(HTMLParser):
-    """Ensure the exported document has no local or remote loading dependencies."""
+    """Only video playback may depend on the published website."""
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if "src" in attrs:
-            assert attrs["src"].startswith("data:"), (tag, attrs["src"])
+            hosted_video = (
+                tag == "source" and attrs.get("type") == "video/mp4"
+                and attrs["src"].startswith(SITE_URL + "assets/videos/")
+            )
+            assert attrs["src"].startswith("data:") or hosted_video, (tag, attrs["src"])
+        if "poster" in attrs:
+            assert attrs["poster"].startswith("data:"), attrs["poster"]
         if tag == "link" and "href" in attrs:
             assert attrs["href"].startswith("data:"), attrs["href"]
         if tag == "a" and "href" in attrs:
@@ -97,12 +104,22 @@ def main():
 
     def replace_reference(match):
         attribute, path = match.groups()
+        # Keep the review file small; load the full MP4 only on playback.
+        if path.endswith(".mp4"):
+            assert (ROOT / path).is_file(), path
+            return f'{attribute}="{SITE_URL}{path}"'
         embedded_value = asset(path)
         if attribute == "href" and path.endswith("method.svg"):
             return f'href="{embedded_value}" data-embedded-image="true"'
         return f'{attribute}="{embedded_value}"'
 
-    page = re.sub(r'(src|href)="(assets/[^\"]+)"', replace_reference, page)
+    page = re.sub(r'(src|href|poster)="(assets/[^\"]+)"', replace_reference, page)
+    page = page.replace(
+        '<figcaption id="evaluation-video-caption">',
+        '<figcaption id="evaluation-video-caption">\n'
+        '            Video playback requires internet. ',
+        1,
+    )
     page, count = re.subn(
         r'<link\s+rel="stylesheet"\s+href="styles.css"\s*/?>',
         lambda _: "<style>\n" + css + "\n</style>", page,
@@ -135,12 +152,13 @@ document.querySelectorAll('a[data-embedded-image]').forEach(link => {
     # This also makes missing dependencies visible during offline verification.
     policy = (
         "default-src 'none'; img-src data: blob:; font-src data:; "
+        f"media-src {SITE_URL}assets/videos/; "
         "style-src 'unsafe-inline'; script-src 'unsafe-inline'; "
         "base-uri 'none'; form-action 'none'"
     )
     page = page.replace('<meta charset="utf-8" />',
         '<meta charset="utf-8" />\n<meta http-equiv="Content-Security-Policy" content="' + policy + '">', 1)
-    comment = "<!-- Standalone review copy. Images, styles, scripts, and fonts are embedded. -->\n"
+    comment = "<!-- Review copy. Images, styles, scripts, and fonts are embedded; video playback requires internet. -->\n"
     page = page.replace('<body>', '<body>\n' + comment, 1)
     license_block = '<!--\nEmbedded font licenses:\n' + licenses.replace('--', '—') + '\n-->\n'
     page = page.replace('</body>', license_block + '<script>\n' + script + '\n</script>\n</body>', 1)
@@ -151,7 +169,7 @@ document.querySelectorAll('a[data-embedded-image]').forEach(link => {
     args.output.write_text(page)
     print(f"Exported {args.output.name}: {args.output.stat().st_size / 1024 / 1024:.2f} MiB")
     print(f"Embedded {len(frames)} rollout images, paper figures, favicon, and {font_count} font files.")
-    print("Resource audit passed: no external files are needed to render the page.")
+    print("Resource audit passed: page assets are embedded; only video playback requires internet.")
 
 
 if __name__ == "__main__":

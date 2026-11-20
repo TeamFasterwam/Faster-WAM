@@ -257,6 +257,22 @@ h3 {
 .section-intro {
   margin-bottom: 23px;
 }
+.evaluation-video {
+  margin-bottom: 28px;
+}
+.evaluation-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: #0b1419;
+}
+.evaluation-video figcaption {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
 .video-placeholder {
   aspect-ratio: 16 / 6;
   background: #f6f6f6;

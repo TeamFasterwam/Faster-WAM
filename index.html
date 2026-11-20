@@ -19,11 +19,11 @@
     />
     <meta
       property="og:image"
-      content="https://teamfasterwam.github.io/FasterWAM.github.io/assets/social-preview.png"
+      content="https://teamfasterwam.github.io/Faster-WAM/assets/social-preview.png"
     />
     <meta
       property="og:url"
-      content="https://teamfasterwam.github.io/FasterWAM.github.io/"
+      content="https://teamfasterwam.github.io/Faster-WAM/"
     />
     <meta name="twitter:card" content="summary_large_image" />
     <title>Faster-WAM · World-Model-Centric Robot Control</title>
@@ -97,15 +97,18 @@
               <path d="m22 16-17 16 17 16m20-32 17 16-17 16M37 9 27 55" /></svg
             ><span>Code</span></a
           >
-          <span class="resource-placeholder">
+          <a
+            class="resource-link"
+            href="https://huggingface.co/TeamFasterwam/FasterWAM"
+          >
             <svg viewBox="0 0 64 64" aria-hidden="true">
               <ellipse cx="32" cy="13" rx="21" ry="8" />
               <path
                 d="M11 13v37c0 4.4 9.4 8 21 8s21-3.6 21-8V13M11 25c0 4.4 9.4 8 21 8s21-3.6 21-8M11 37c0 4.4 9.4 8 21 8s21-3.6 21-8"
               />
             </svg>
-            <span>Weights</span><small>Coming soon</small>
-          </span>
+            <span>Weights</span>
+          </a>
         </div>
       </header>
 
@@ -308,6 +311,7 @@
 
       <section
         class="section container real-results"
+        id="real-robot-evaluation"
         aria-labelledby="real-results-title"
       >
         <div class="section-heading">
@@ -319,6 +323,26 @@
             average success, compared with 80.0% for Fast-WAM.
           </p>
         </div>
+        <figure class="evaluation-video">
+          <video
+            controls
+            playsinline
+            preload="none"
+            poster="assets/videos/real-robot-poster.jpg"
+            width="1920"
+            height="1080"
+            aria-label="Full rollout video of the real-robot evaluation"
+            aria-describedby="evaluation-video-caption"
+          >
+            <source src="assets/videos/Faster-WAM_release.mp4" type="video/mp4" />
+            Your browser does not support embedded video. Use the link below to
+            open the full rollout video.
+          </video>
+          <figcaption id="evaluation-video-caption">
+            Full rollout video · 2 min 42 s ·
+            <a href="assets/videos/Faster-WAM_release.mp4">Open video</a>
+          </figcaption>
+        </figure>
         <div class="real-stats">
           <div>
             <span>129 <small>ms</small></span>

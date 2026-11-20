@@ -36,7 +36,7 @@ Exporting needs internet access to bundle the Google Fonts and their licenses. T
 
 - **Code:** https://github.com/TeamFasterwam/FasterWAM (the owner-provided URL).
 - **Weights:** https://huggingface.co/TeamFasterwam/FasterWAM.
-- **Video:** the complete 2 min 42 s real-robot evaluation video appears under Real-Robot Evaluation. The original 1080p H.264/AAC MP4 is preserved, with native playback controls and no autoplay or video preloading. The separate snapshot comparison remains available above it.
+- **Video:** the complete 2 min 42 s real-robot evaluation video appears under Real-Robot Evaluation. The 1080p H.264/AAC MP4 uses native playback controls, with no autoplay or video preloading. The separate snapshot comparison remains available above it.
 
 ## Rollout timing
 
@@ -51,7 +51,7 @@ The source used for this draft is the matching arXiv submission in `../arxiv_sub
 - `figures/main_figure.pdf` → overview in the Method section.
 - `figures/method_figure.pdf` → complete architecture diagram.
 - `appx/real_world_rollouts/` → interactive snapshot comparison directly after the Abstract. Images are **recorded snapshots, not a video**. The seconds-based playback preserves the original elapsed time.
-- `../Faster-WAM_release.mp4` → `assets/videos/Faster-WAM_release.mp4`, copied unchanged. The poster is a frame extracted at 3 seconds.
+- `../Faster-WAM_release.mp4` → `assets/videos/Faster-WAM_real-robot.mp4`, with the submission label removed from the opening four seconds and the MP4 title metadata. Only the introduction is re-encoded; the remaining video and complete audio stream are copied unchanged. The poster is extracted from the edited video at 3 seconds.
 - `../xvdycwvhbjrdfjmvsyddwqfbmhkdzfng.zip` → an additional 21-second sample for all four policies, plus 15 LingBot-VA snapshots at 45, 50, 55, 65, 70, 75, 85, 90, 95, 105, 110, 115, 125, 130, and 135 seconds. All 35 PNGs shared by this archive and the published source match byte for byte. No frames are synthesized or interpolated. Files after each policy's final comparison slot are excluded because the final frame is held once its task is complete.
 - Tables 1–3 → benchmark and generalization results.
 - Table 4 and Appendix G → physical evaluation and illustrative rollout completion times. Individual rollout times are not mean completion times.
